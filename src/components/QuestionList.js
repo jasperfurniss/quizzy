@@ -1,23 +1,3 @@
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      questions: QuestionsList
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        {boxscore}
-        <QuestionList setScore={this.setScore.bind(this)} setCurrent={this.setCurrent.bind(this)} {...this.state}/>
-        {results}
-      </div>
-    );
-  }
-}
-
-
 import React from 'react';
 import Question from './Question.js';
 

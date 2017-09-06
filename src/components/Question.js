@@ -1,22 +1,34 @@
-import React, { Component } from 'react'
-import QuestionsList from '../api/questions'
+import React from 'react';
 
-// Question Component
-class Question extends Component {
+class Question extends React.Component {
+
+  handleChange(e) {
+    const {setCurrent, setScore, question} = this.props;
+    e.preventDefault();
+    const selected = e.target.value;
+    setCurrent(this.props.current + 1);
+    if (selected === question.correct) {
+      setScore(this.props.score + 1);
+    }
+  }
+
   render() {
     const {question} = this.props;
-    return(
-      <div className="card">
-        <div className="card-content">
-          <h1>{question.question_text}</h1>
-          <h4>
-            <ul>
-              {QuestionsList.filter((item, index) =>
-             (item.id == 0)).map(item =>
-                  <li key={item.id}>{item.question_text}</li>)}
-            </ul>
-          </h4>
-        </div>
+    return (
+      <div className="well">
+        <h3>{question.text}</h3>
+        <hr />
+        <ul className="list-group">
+          {
+            question.choices.map(choice => {
+              return (
+                <li className="list-group-item" key={choice.id}>{choice.id}
+                  <input onChange={this.handleChange.bind(this)} type="radio" name={question.id} value={choice.id}/> {choice.text}
+                </li>
+              );
+            })
+          }
+        </ul>
       </div>
     );
   }

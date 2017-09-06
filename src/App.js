@@ -1,64 +1,109 @@
-import React, { Component } from 'react'
-import gh from './gh.png'
-import './App.css'
-import { Button } from 'react-materialize'
-import QuestionsList from './api/questions'
-import Question from './components/Question'
+import React from 'react';
+import BoxScore from './components/BoxScore.js';
+import QuestionList from './components/QuestionList.js';
+import Results from './components/Results.js';
 
 
-
-class App extends Component {
-  componentWillMount() {
-    console.log("Component Mounted");
-    this.setState({
-      questions_list: QuestionsList,
-      current_question: 0,
-      current_score: 0,
-      question_text: QuestionsList[0].question_text
-    });
-  }
-
-  componentDidMount() {
-    console.log(this.state.current_score)
-    console.log(this.state.questions_list[0].question_text);
-  }
-
-  gotoNextQuestion(event) {
-    this.setState({
-      current_question: this.state.current_question + 1
-    }, function () {
-      console.log(this.state.current_question)
-      console.log(this.state.question_text)
-    })
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <div>
-          <div className="container">
-
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      questions: [
+        {
+          id: 1,
+          text: 'What does JSON stand for',
+          choices: [
             {
-              this.state.questions_list.map(question => {
-                if (this.state.current_question === question.id) {
-                  return <Question key={question.id} text={this.state.question_text} current_question={this.state.current_question} {...this.props} />
-                }
-              })
+              id: 'a',
+              text: 'JavaScript Oriented Notation',
+            },
+            {
+              id: 'b',
+              text: 'JavaScript Object Notation',
+            },
+            {
+              id: 'c',
+              text: 'JavaScript Organic Notation',
             }
-
-            <Button className="btn" onClick={this.gotoNextQuestion.bind(this)}>Next</Button>
-          </div>
-        </div>
+          ],
+          correct: 'b'
+        },
+        {
+          id: 2,
+          text: 'Which company mantains ReactJS',
+          choices: [
+            {
+              id: 'a',
+              text: 'Google',
+            },
+            {
+              id: 'b',
+              text: 'Facebook',
+            },
+            {
+              id: 'c',
+              text: 'Airbnb',
+            }
+          ],
+          correct: 'b'
+        },
+        {
+          id: 3,
+          text: 'Is it an antipattern to include props in the getInitialState method of a component?',
+          choices: [
+            {
+              id: 'a',
+              text: 'Yes',
+            },
+            {
+              id: 'b',
+              text: 'No',
+            },
+          ],
+          correct: 'a'
+        },
+        {
+          id: 4,
+          text: 'Is ReactJS a framework by itself?',
+          choices: [
+            {
+              id: 'a',
+              text: 'Yes',
+            },
+            {
+              id: 'b',
+              text: 'No',
+            },
+          ],
+          correct: 'b'
+        }
+      ],
+      score: 0,
+      current: 1
+    }
+  }
+  setCurrent(current) {
+    this.setState({current});
+  }
+  setScore(score) {
+    this.setState({score});
+  }
+  render() {
+    if (this.state.current > this.state.questions.length) {
+      var boxscore = '';
+      var results = <Results {...this.state}/>
+    } else {
+      var boxscore = <BoxScore {...this.state} />
+      var results = '';
+    }
+    return (
+      <div>
+        {boxscore}
+        <QuestionList setScore={this.setScore.bind(this)} setCurrent={this.setCurrent.bind(this)} {...this.state}/>
+        {results}
       </div>
     );
   }
 }
-
-
-// Answer Component
-const AnswerCard = (props) => {
-    <div>{props.text}</div>
-}
-
 
 export default App;
